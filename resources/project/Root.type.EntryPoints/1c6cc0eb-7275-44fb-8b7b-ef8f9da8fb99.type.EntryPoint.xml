@@ -1,0 +1,4 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<Info Type="StartUp" Visible="1" Icon="" File="AuxiliaryFunctions/ProjectManagement/launchSimulinkRequirements.m" Name="Open Simulink Requirements Editor">
+    <Extension Value="56b1f262-8e9b-4d02-9f4b-bcfd8b6c451e" Name="StartUpPrev" />
+</Info>
