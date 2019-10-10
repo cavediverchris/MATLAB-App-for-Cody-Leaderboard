@@ -29,14 +29,14 @@ if verLessThan('matlab','R2018B')
     % paths required.
     
     % Create the location of slprj to be the "work" folder of the current project:
-    myCacheFolder = fullfile(projectRoot, 'SimulationRunTimeFiles');
+    myCacheFolder = fullfile(projObj.RootFolder, 'SimulationRunTimeFiles');
     if ~exist(myCacheFolder, 'dir')
         mkdir(myCacheFolder)
     end
     
     % Create the location for any files generated during build for code
     % generation.
-    myCodeGenFolder = fullfile(projectRoot, 'CompiledCode');
+    myCodeGenFolder = fullfile(projObj.RootFolder, 'CompiledCode');
     if ~exist(myCodeGenFolder, 'dir')
         mkdir(myCodeGenFolder)
     end
@@ -46,6 +46,41 @@ if verLessThan('matlab','R2018B')
         'CodeGenFolder', myCodeGenFolder);
     
     clear myCacheFolder myCodeGenFolder;
+elseif ~verLessThan('matlab','R2019B')
+    % CASE: Within the project it is possible to define cache and code
+    % gen folders. 
+    % ACTION: Check if these have been defined
+    
+    
+    % Check for Simulink Cache Folder
+    if strcmp(projObj.Information.SimulinkCacheFolder, projObj.RootFolder)
+        % CASE: The Simulink Cache folder is the same as the root, this
+        % means that the project does not define the Simulink Cache Folder
+        % ACTION: specify the Simulink Cache folder
+        
+        % Create the location of slprj to be the "work" folder of the current project:
+        myCacheFolder = fullfile(projObj.RootFolder, 'SimulationRunTimeFiles');
+        if ~exist(myCacheFolder, 'dir')
+            mkdir(myCacheFolder)
+        end
+        
+        Simulink.fileGenControl('set', 'CacheFolder', myCacheFolder);
+    end
+    
+    % Check for Simulink Code Generation Folder
+    if strcmp(projObj.Information.SimulinkCodeGenFolder, projObj.RootFolder)
+        % CASE: The Simulink Code Gen folder is the same as the root, this
+        % means that the project does not define the Simulink Cache Folder
+        % ACTION: specify the Simulink Code Gen folder
+        
+        % Create the location of slprj to be the "work" folder of the current project:
+        myCodeGenFolder = fullfile(projObj.RootFolder, 'CompiledCode');
+        if ~exist(myCodeGenFolder, 'dir')
+            mkdir(myCodeGenFolder)
+        end
+        
+        Simulink.fileGenControl('set', 'CodeGenFolder', myCodeGenFolder);
+    end
 end
 %% Refresh SIMULINK Browser
 % This is used to make sure that custom libraries are re-loaded from the
